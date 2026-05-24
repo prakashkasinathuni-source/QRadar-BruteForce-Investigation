@@ -1,100 +1,53 @@
-# IBM QRadar Brute Force Investigation
+# QRadar Malware Investigation
 
-This investigation demonstrates how IBM QRadar SIEM can be used to detect and analyze brute-force authentication attacks targeting privileged user accounts.
-
-The scenario focuses on failed login monitoring, event correlation, IOC analysis, and incident response activities performed by a SOC analyst.
+This folder contains a SOC investigation of a malware incident detected using IBM QRadar SIEM.
 
 ---
 
-# Investigation Overview
+## Overview
 
-A high-severity QRadar offense was generated after multiple failed login attempts were detected from a single external IP address within a short time period.
-
-The investigation involved:
-- Authentication log analysis
-- Event correlation
-- Source IP reputation review
-- User activity verification
-- Containment and remediation
+A malicious executable was detected on a user workstation, which triggered QRadar correlation rules due to suspicious process execution and outbound network communication.
 
 ---
 
-# Tools Used
+## What was analyzed
 
-- IBM QRadar SIEM
-- Windows Security Event Logs
-- Firewall Logs
-- VPN Authentication Logs
-- Active Directory Logs
-
----
-
-# Detection Logic
-
-The QRadar correlation rule triggered when:
-- Failed login attempts exceeded threshold
-- Multiple authentication failures targeted privileged accounts
-- Events originated from same external source IP
+- Process execution logs (Sysmon)
+- Network traffic logs
+- Persistence mechanisms
+- SIEM correlation events
+- Threat intelligence data
 
 ---
 
-# MITRE ATT&CK Mapping
+## Key Findings
 
-| Tactic | Technique | ID |
-|--------|-----------|----|
-| Credential Access | Brute Force | T1110 |
-| Initial Access | Valid Accounts | T1078 |
-
----
-
-# Investigation Workflow
-
-1. Review QRadar offense details
-2. Analyze authentication events
-3. Verify affected accounts
-4. Check source IP reputation
-5. Correlate VPN and firewall logs
-6. Identify successful login attempts
-7. Contain malicious activity
-8. Recommend security improvements
+- Execution of suspicious file: `invoice_update.exe`
+- Connection to external IP: `91.240.118.172`
+- Registry-based persistence attempt detected
+- Malware behavior confirmed via SIEM correlation
 
 ---
 
-# Sample AQL Query
+## Skills Demonstrated
 
-```sql
-SELECT sourceIP, username, COUNT(*)
-FROM events
-WHERE eventName='Login Failed'
-GROUP BY sourceIP, username
-LAST 1 HOURS
-```
-
----
-
-# Skills Demonstrated
-
-- QRadar Offense Investigation
-- SIEM Monitoring
-- Log Correlation
-- Authentication Analysis
-- Threat Detection
-- Incident Response
-- IOC Analysis
-- AQL Querying
+- SIEM (QRadar) analysis
+- Malware investigation
+- Log correlation
+- IOC extraction
+- Incident response workflow
+- MITRE ATT&CK mapping
 
 ---
 
-# Recommendations
+## MITRE ATT&CK
 
-- Enable MFA
-- Configure account lockout policies
-- Improve authentication monitoring
-- Restrict suspicious IP addresses
-- Tune QRadar detection rules
+- T1204 – User Execution
+- T1547.001 – Registry Run Keys
+- T1071 – Command and Control
 
 ---
 
-# Disclaimer
+## Disclaimer
 
-All logs, usernames, IP addresses, and indicators used in this repository are for educational purposes only.
+All artifacts used in this investigation are fictional and used for educational purposes only.
