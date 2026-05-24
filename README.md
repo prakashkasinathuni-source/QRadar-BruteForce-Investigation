@@ -1,94 +1,100 @@
-# QRadar-BruteForce-Investigation
-# SOC Investigation Writeups
+# IBM QRadar Brute Force Investigation
 
-This repository contains cybersecurity investigation scenarios and SOC analyst case studies focused on threat detection, log analysis, incident response, and SIEM investigations.
+This investigation demonstrates how IBM QRadar SIEM can be used to detect and analyze brute-force authentication attacks targeting privileged user accounts.
 
-The purpose of this repository is to demonstrate practical SOC analysis skills using real-world security investigation workflows.
-
----
-
-# Technologies & Tools
-
-- IBM QRadar
-- Microsoft Defender
-- Sysmon
-- Windows Event Logs
-- SIEM Correlation Rules
-- MITRE ATT&CK Framework
+The scenario focuses on failed login monitoring, event correlation, IOC analysis, and incident response activities performed by a SOC analyst.
 
 ---
 
-# Investigation Scenarios
+# Investigation Overview
 
-## 1. Phishing Investigation
-- Suspicious email analysis
-- Malicious attachment investigation
-- PowerShell execution analysis
-- IOC identification
+A high-severity QRadar offense was generated after multiple failed login attempts were detected from a single external IP address within a short time period.
 
-## 2. Malware Triage Investigation
-- Malware execution detection
-- Process analysis
-- Network connection investigation
-- Persistence mechanism analysis
+The investigation involved:
+- Authentication log analysis
+- Event correlation
+- Source IP reputation review
+- User activity verification
+- Containment and remediation
 
-## 3. QRadar Brute Force Investigation
-- Authentication failure monitoring
-- Brute force attack detection
-- AQL query analysis
-- User account protection
+---
+
+# Tools Used
+
+- IBM QRadar SIEM
+- Windows Security Event Logs
+- Firewall Logs
+- VPN Authentication Logs
+- Active Directory Logs
+
+---
+
+# Detection Logic
+
+The QRadar correlation rule triggered when:
+- Failed login attempts exceeded threshold
+- Multiple authentication failures targeted privileged accounts
+- Events originated from same external source IP
+
+---
+
+# MITRE ATT&CK Mapping
+
+| Tactic | Technique | ID |
+|--------|-----------|----|
+| Credential Access | Brute Force | T1110 |
+| Initial Access | Valid Accounts | T1078 |
+
+---
+
+# Investigation Workflow
+
+1. Review QRadar offense details
+2. Analyze authentication events
+3. Verify affected accounts
+4. Check source IP reputation
+5. Correlate VPN and firewall logs
+6. Identify successful login attempts
+7. Contain malicious activity
+8. Recommend security improvements
+
+---
+
+# Sample AQL Query
+
+```sql
+SELECT sourceIP, username, COUNT(*)
+FROM events
+WHERE eventName='Login Failed'
+GROUP BY sourceIP, username
+LAST 1 HOURS
+```
 
 ---
 
 # Skills Demonstrated
 
+- QRadar Offense Investigation
 - SIEM Monitoring
-- Alert Investigation
-- Log Analysis
-- Threat Hunting
+- Log Correlation
+- Authentication Analysis
+- Threat Detection
 - Incident Response
-- Malware Analysis
-- MITRE ATT&CK Mapping
 - IOC Analysis
-- Event Correlation
-- Security Monitoring
+- AQL Querying
 
 ---
 
-# MITRE ATT&CK Techniques Covered
+# Recommendations
 
-| Technique | ID |
-|-----------|----|
-| Phishing | T1566 |
-| PowerShell | T1059.001 |
-| Brute Force | T1110 |
-| Valid Accounts | T1078 |
-| Registry Run Keys | T1547.001 |
-| User Execution | T1204 |
-
----
-
-# Repository Structure
-
-```text
-SOC-Investigation-Writeups/
-│
-├── Phishing-Investigation/
-├── Malware-Triage-Investigation/
-├── QRadar-BruteForce-Investigation/
-└── README.md
-```
+- Enable MFA
+- Configure account lockout policies
+- Improve authentication monitoring
+- Restrict suspicious IP addresses
+- Tune QRadar detection rules
 
 ---
 
 # Disclaimer
 
-All IP addresses, domains, usernames, hashes, and investigation data used in this repository are for educational and demonstration purposes only.
-
-No real organizational or customer data has been included.
-
----
-
-# Author
-
-SOC Analyst | SIEM Monitoring | Incident Response | Threat Detection | Cybersecurity
+All logs, usernames, IP addresses, and indicators used in this repository are for educational purposes only.
